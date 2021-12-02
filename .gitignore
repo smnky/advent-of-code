@@ -1,0 +1,39 @@
+# Created by https://www.toptal.com/developers/gitignore/api/clojure,visualstudiocode
+# Edit at https://www.toptal.com/developers/gitignore?templates=clojure,visualstudiocode
+
+### Clojure ###
+pom.xml
+pom.xml.asc
+*.jar
+*.class
+/lib/
+/classes/
+/target/
+/checkouts/
+.lein-deps-sum
+.lein-repl-history
+.lein-plugins/
+.lein-failures
+.nrepl-port
+.cpcache/
+
+### VisualStudioCode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
+
+# Local History for Visual Studio Code
+.history/
+
+### VisualStudioCode Patch ###
+# Ignore all local history of files
+.history
+.ionide
+
+# Support for Project snippet scope
+!.vscode/*.code-snippets
+
+# End of https://www.toptal.com/developers/gitignore/api/clojure,visualstudiocode
