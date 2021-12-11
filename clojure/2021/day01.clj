@@ -2,16 +2,22 @@
 (ns day01
   (:require [clojure.string :as str]))
 
-(def input-str (slurp "input/2021/day01.txt"))
+(def input (->> "input/2021/day01.txt"
+                slurp
+                str/split-lines
+                (mapv parse-long)))
 
-(def input (->> input-str
-                clojure.string/split-lines
-                (map #(Integer/parseInt %))))
+(defn part1 [input]
+  (->> input
+       (partition 2 1)
+       (filter #(apply < %))
+       count))
 
-(->> (map < input (rest input)) (filter identity) count println)
+(defn part2 [input]
+  (->> input
+       (partition 3 1)
+       (mapv #(apply + %))
+       part1))
 
-(def input-3 (map + input (rest input) (rest (rest input))))
-
-
-
-(->> (map < input-3 (rest input-3)) (filter identity) count println)
+(prn (str "Part 1: " (part1 input)))
+(prn (str "Part 2: " (part2 input)))
