@@ -21,14 +21,18 @@
       nil)))
 
 
+(defn- multiply
+  [{:keys [depth horizontal]}]
+  (when (and depth horizontal)
+    (* depth horizontal)))
+
+
 (defn part1
   [input]
-  (let [sum (->> input
-                 (map parse)
-                 (apply merge-with +))
-        depth      (get sum :depth 0)
-        horizontal (get sum :horizontal 0)]
-    (* depth horizontal)))
+  (->> input
+       (map parse)
+       (apply merge-with +)
+       multiply))
 
 
 (println (str "Part 1: " (part1 input)))
