@@ -7,54 +7,40 @@
 (def input
   (->> "input/2021/day02.txt"
        slurp
-       str/split-lines))
+       str/split-lines
+       (map #(str/split % #"\s+"))
+       (map #(update % 1 parse-long))))
 
 
-(defn parse
-  [line]
-  (let [[_ direction unit-str] (re-find #"(\w+) (\d+)" line)
-        unit (parse-long unit-str)]
-    (case direction
-      "up"      {:y   (- unit)}
-      "down"    {:y      unit}
-      "forward" {:x unit}
-      nil)))
-
-
-(defn- multiply
-  [{:keys [y x]}]
-  (when (and y x)
-    (* y x)))
+(defn move
+  [[x y] [direction amount]]
+  (case direction
+    "up"      [x, (- y amount)]
+    "down"    [x, (+ y amount)]
+    "forward" [(+ x amount), y]))
 
 
 (defn part1
   [input]
   (->> input
-       (map parse)
-       (apply merge-with +)
-       multiply))
+       (reduce move [0 0])
+       (apply *)))
 
 
-(defn- move-or-aim
-  [{aim :aim, y-acc :y, x-acc :x
-    :or {aim 0, y-acc 0, x-acc 0}, :as acc}
-   {:keys [y x]}]
-  (cond
-    y {:aim (+ aim y)
-       :y y-acc
-       :x x-acc}
-    x {:aim aim
-       :y (+ y-acc (* aim x))
-       :x (+ x-acc x)}
-    :else acc))
+(defn move-or-aim
+  [[x y aim] [direction amount]]
+  (case direction
+    "up"      [x, y, (- aim amount)]
+    "down"    [x, y, (+ aim amount)]
+    "forward" [(+ x amount), (+ y (* aim amount)), aim]))
 
 
 (defn part2
   [input]
   (->> input
-       (map parse)
-       (reduce move-or-aim)
-       multiply))
+       (reduce move-or-aim [0 0 0])
+       butlast  ; omit aim
+       (apply *)))
 
 
 (println (str "Part 1: " (part1 input)))
