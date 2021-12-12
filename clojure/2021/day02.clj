@@ -15,16 +15,16 @@
   (let [[_ direction unit-str] (re-find #"(\w+) (\d+)" line)
         unit (parse-long unit-str)]
     (case direction
-      "up"      {:depth   (- unit)}
-      "down"    {:depth      unit}
-      "forward" {:horizontal unit}
+      "up"      {:y   (- unit)}
+      "down"    {:y      unit}
+      "forward" {:x unit}
       nil)))
 
 
 (defn- multiply
-  [{:keys [depth horizontal]}]
-  (when (and depth horizontal)
-    (* depth horizontal)))
+  [{:keys [y x]}]
+  (when (and y x)
+    (* y x)))
 
 
 (defn part1
@@ -35,17 +35,17 @@
        multiply))
 
 
-(defn- step-fn
-  [{aim :aim, depth-acc :depth, horizontal-acc :horizontal
-    :or {aim 0, depth-acc 0, horizontal-acc 0}, :as acc}
-   {:keys [depth horizontal]}]
+(defn- move-or-aim
+  [{aim :aim, y-acc :y, x-acc :x
+    :or {aim 0, y-acc 0, x-acc 0}, :as acc}
+   {:keys [y x]}]
   (cond
-    depth {:aim (+ aim depth)
-           :depth depth-acc
-           :horizontal horizontal-acc}
-    horizontal {:aim aim
-                :depth (+ depth-acc (* aim horizontal))
-                :horizontal (+ horizontal-acc horizontal)}
+    y {:aim (+ aim y)
+       :y y-acc
+       :x x-acc}
+    x {:aim aim
+       :y (+ y-acc (* aim x))
+       :x (+ x-acc x)}
     :else acc))
 
 
@@ -53,7 +53,7 @@
   [input]
   (->> input
        (map parse)
-       (reduce step-fn)
+       (reduce move-or-aim)
        multiply))
 
 
